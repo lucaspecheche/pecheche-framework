@@ -4,25 +4,40 @@ namespace Core\App\Http;
 
 class Request
 {
-    public static function urn()
-    {
-        return parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    protected $server;
+    protected $input;
 
+    public function __construct(ServerRequest $serverRequest)
+    {
+        $this->server = $serverRequest;
+        $this->input  = $this->load();
     }
 
-    private function getRequest()
+    private function load(): object
     {
-        $obj = new \stdClass();
+        $input = new \stdClass();
+        $data  = $this->getInput();
 
-        foreach ($_GET as $key => $value) {
-            @$obj->get->$key = $value;
+        foreach ($data as $key => $value) {
+            @$input->$key = $value;
         }
 
-        foreach ($_POST as $key => $value) {
-            @$obj->post->$key = $value;
+        return $input;
+    }
+
+    private function getInput(): array
+    {
+        if ($this->server->getContentType() === Headers::APPLICATION_JSON) {
+            $json = file_get_contents("php://input");
+            return json_decode($json, true) ?? [];
         }
 
-        return $obj;
+        return $_REQUEST;
+    }
+
+    public function all(): object
+    {
+        return $this->input;
     }
 
 }

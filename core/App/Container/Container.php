@@ -7,18 +7,13 @@ use ReflectionClass;
 
 class Container
 {
-    public static function instance(string $controller, string $action, array $parameters)
-    {
-        return (new $controller)->$action($parameters);
-    }
-
-    public static function resolve(string $class)
+    public function resolve(string $class): object
     {
         $reflection = new ReflectionClass($class);
-        return self::make($reflection);
+        return $this->resolving($reflection);
     }
 
-    private static function make(ReflectionClass $class)
+    private function resolving(ReflectionClass $class)
     {
         $construct    = $class->getConstructor();
         $dependencies = [];
@@ -37,7 +32,7 @@ class Container
                     throw new UnableToResolveClass();
                 }
 
-                $received = self::make($makeNext);
+                $received = $this->resolving($makeNext);
                 $dependencies[] = $received;
             }
 

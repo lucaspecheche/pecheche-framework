@@ -1,6 +1,7 @@
 <?php
 
 use Core\App\Container\Container;
+use Core\App\Http\Request;
 use Core\App\Http\Response;
 
 function base_path($path = ''): string
@@ -26,9 +27,15 @@ function server_host($urn = ''): string
 
 function resolve(string $class)
 {
-    return Container::resolve($class);
+    return (new Container())->resolve($class);
 }
 
-function response() {
+function response(): Response
+{
     return resolve(Response::class);
+}
+
+function request(): Request
+{
+    return resolve(Request::class);
 }

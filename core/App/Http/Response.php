@@ -4,7 +4,7 @@ namespace Core\App\Http;
 
 class Response
 {
-    public static function json($data)
+    public function json($data)
     {
         header('Content-Type: application/json');
         http_response_code(200);

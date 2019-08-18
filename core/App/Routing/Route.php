@@ -3,6 +3,7 @@
 namespace Core\App\Routing;
 
 use Core\App\Http\Request;
+use Core\App\Http\ServerRequest;
 
 class Route
 {
@@ -21,8 +22,9 @@ class Route
         $this->verb       = $verb;
         $this->parameters = [];
 
+        $urn         = (new ServerRequest())->getUrn();
         $this->route = $this->explode($route); //Endereco de Rotas
-        $this->urn   = $this->explode(Request::urn()); //Endereço de Entrada
+        $this->urn   = $this->explode($urn); //Endereço de Entrada
     }
 
     public function match(): bool
