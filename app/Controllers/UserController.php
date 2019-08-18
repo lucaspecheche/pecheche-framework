@@ -6,7 +6,12 @@ class UserController
 {
     public function create($array)
     {
-        response()->json(request()->all());
+        return response()->json('create');
+    }
+
+    public function update($array)
+    {
+        return response()->json('update');
     }
 
 }

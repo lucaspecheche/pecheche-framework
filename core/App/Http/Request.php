@@ -2,15 +2,15 @@
 
 namespace Core\App\Http;
 
-class Request
+class Request extends ServerRequest
 {
     protected $server;
     protected $input;
 
-    public function __construct(ServerRequest $serverRequest)
+    public function __construct()
     {
-        $this->server = $serverRequest;
         $this->input  = $this->load();
+        parent::__construct();
     }
 
     private function load(): object
@@ -27,7 +27,7 @@ class Request
 
     private function getInput(): array
     {
-        if ($this->server->getContentType() === Headers::APPLICATION_JSON) {
+        if ($this->getContentType() === Headers::APPLICATION_JSON) {
             $json = file_get_contents("php://input");
             return json_decode($json, true) ?? [];
         }

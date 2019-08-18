@@ -3,7 +3,6 @@
 namespace Core\App\Routing;
 
 use Core\App\Http\Request;
-use Core\App\Http\ServerRequest;
 
 class Route
 {
@@ -11,6 +10,7 @@ class Route
     public $controller;
     public $parameters;
 
+    protected $request;
     protected $route;
     protected $verb;
     protected $urn;
@@ -22,14 +22,19 @@ class Route
         $this->verb       = $verb;
         $this->parameters = [];
 
-        $urn         = (new ServerRequest())->getUrn();
+        $this->request    = new Request();
+
         $this->route = $this->explode($route); //Endereco de Rotas
-        $this->urn   = $this->explode($urn); //Endereço de Entrada
+        $this->urn   = $this->explode($this->request->getUri()); //Endereço de Entrada
     }
 
     public function match(): bool
     {
         if (count($this->urn) !== count($this->route)) {
+            return false;
+        }
+
+        if ($this->verb !== $this->request->getMethod()) {
             return false;
         }
 
