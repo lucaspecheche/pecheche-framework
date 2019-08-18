@@ -2,8 +2,6 @@
 
 namespace Core\App\Routing;
 
-use Core\App\Container\Container;
-
 class Routes
 {
     private $routes;
@@ -26,14 +24,14 @@ class Routes
     public function demand()
     {
         foreach ($this->routes as $route) {
-            $exists = $route->search();
+            $exists = $route->match();
 
             if($exists) {
-                return Container::instance($route->controller, $route->action, $route->parameters);
+                $action = $route->action;
+                return resolve($route->controller)->$action($route->parameters);
             }
         }
 
         include public_path('404/index.phtml');
-        die();
     }
 }

@@ -1,5 +1,8 @@
 <?php
 
+use Core\App\Container\Container;
+use Core\App\Http\Response;
+
 function base_path($path = ''): string
 {
     return dirname(__DIR__, 3) . "/$path";
@@ -21,17 +24,11 @@ function server_host($urn = ''): string
     return "http://$server/$urn";
 }
 
-function debug()
+function resolve(string $class)
 {
+    return Container::resolve($class);
+}
 
-    $debug_arr = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-    $line = $debug_arr[0]['line'];
-    $file = $debug_arr[0]['file'];
-
-    header('Content-Type: text/plain');
-
-    echo "linha: $line\n";
-    echo "arquivo: $file\n\n";
-    print_r(array('GET' => $_GET, 'POST' => $_POST, 'SERVER' => $_SERVER));
-    exit;
+function response() {
+    return resolve(Response::class);
 }

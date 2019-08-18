@@ -25,7 +25,7 @@ class Route
         $this->urn   = $this->explode(Request::urn()); //Endereço de Entrada
     }
 
-    public function search(): bool
+    public function match(): bool
     {
         if (count($this->urn) !== count($this->route)) {
             return false;
