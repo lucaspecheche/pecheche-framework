@@ -13,7 +13,7 @@ class Route
     protected $request;
     protected $route;
     protected $verb;
-    protected $urn;
+    protected $uri;
 
     public function __construct(string $route, string $controller, string $action, string $verb)
     {
@@ -25,12 +25,12 @@ class Route
         $this->request    = new Request();
 
         $this->route = $this->explode($route); //Endereco de Rotas
-        $this->urn   = $this->explode($this->request->getUri()); //Endereço de Entrada
+        $this->uri   = $this->explode($this->request->getUri()); //Endereço de Entrada
     }
 
     public function match(): bool
     {
-        if (count($this->urn) !== count($this->route)) {
+        if (count($this->uri) !== count($this->route)) {
             return false;
         }
 
@@ -51,31 +51,31 @@ class Route
 
     private function validatePiece(int $position, string $piece): bool
     {
-        if ($this->urn[$position] === $piece) {
+        if ($this->uri[$position] === $piece) {
             return true;
         }
 
         if (strpos($piece, '{') === 0) {
-            $this->parameters[] = $this->urn[$position];
+            $this->parameters[] = $this->uri[$position];
             return true;
         }
 
         return false;
     }
 
-    private function explode(string $urn)
+    private function explode(string $uri)
     {
-        if(strpos($urn, '/') === 0) {
-            $urn = substr($urn, 1);
+        if(strpos($uri, '/') === 0) {
+            $uri = substr($uri, 1);
         }
 
-        $len = strlen($urn)-1;
+        $len = strlen($uri)-1;
 
-        if($len !== -1 && $urn[$len] === '/') {
-            $urn = substr($urn, 0, $len);
+        if($len !== -1 && $uri[$len] === '/') {
+            $uri = substr($uri, 0, $len);
         }
 
-        return explode('/', $urn);
+        return explode('/', $uri);
     }
 
 }

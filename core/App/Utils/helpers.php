@@ -25,6 +25,11 @@ function server_host($urn = ''): string
     return "http://$server/$urn";
 }
 
+function config(string $name): array
+{
+    return require base_path("config/$name.php");
+}
+
 function resolve(string $class)
 {
     return (new Container())->resolve($class);

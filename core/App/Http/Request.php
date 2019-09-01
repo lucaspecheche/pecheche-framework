@@ -2,15 +2,14 @@
 
 namespace Core\App\Http;
 
-class Request extends ServerRequest
+class Request extends Server
 {
     protected $server;
     protected $input;
 
     public function __construct()
     {
-        $this->input  = $this->load();
-        parent::__construct();
+        $this->input = $this->load();
     }
 
     private function load(): object
