@@ -21,6 +21,7 @@ class Builder extends Grammar
 
     public function where($column, $operator, $value)
     {
+
         $this->query[Grammar::WHERE][] = [
             'column' => $column,
             'operator' => $operator,
